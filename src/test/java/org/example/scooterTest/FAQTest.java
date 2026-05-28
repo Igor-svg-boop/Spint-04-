@@ -1,61 +1,60 @@
-package org.example.scooterTest;
+package org.example.scooter.test;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 
-import static org.example.scooterTest.Resources.*;
+import static org.example.scooter.test.Resources.*;
 
+@RunWith(Parameterized.class)
 public class FAQTest {
 
     private WebDriver driver;
+    private HomePageScooter objHomePage;
+
+    private final String questionText;
+    private final String expectedAnswerText;
+
+    public FAQTest(String questionText, String expectedAnswerText) {
+        this.questionText = questionText;
+        this.expectedAnswerText = expectedAnswerText;
+    }
+
+    @Parameterized.Parameters
+    public static Object[][] getTestData() {
+        return new Object[][]{
+                {"Сколько это стоит? И как оплатить?", ANSWER_1_TEXT},
+                {"Хочу сразу несколько самокатов! Так можно?", ANSWER_2_TEXT},
+                {"Как рассчитывается время аренды?", ANSWER_3_TEXT},
+                {"Можно ли заказать самокат прямо на сегодня?", ANSWER_4_TEXT},
+                {"Можно ли продлить заказ или вернуть самокат раньше?", ANSWER_5_TEXT},
+                {"Вы привозите зарядку вместе с самокатом?", ANSWER_6_TEXT},
+                {"Можно ли отменить заказ?", ANSWER_7_TEXT},
+                {"Я жизу за МКАДом, привезёте?", ANSWER_8_TEXT}
+        };
+    }
+
+    @Before
+    public void setUp() {
+        driver = new ChromeDriver();
+        objHomePage = new HomePageScooter(driver);
+        objHomePage.openHomePage();
+        objHomePage.acceptCookieButtonClick();
+    }
 
     @Test
     public void FAQCorrectAnswerText() {
-        // Создать веб-драйвер для Google Chrome
-        driver = new ChromeDriver();
-        // Открыть страницу домашнюю Яндекс Самокат
-        driver.get("https://qa-scooter.praktikum-services.ru");
-        // Проскролить страницу до появления таблицы с вопросами
-        WebElement tableFAQ = driver.findElement(By.xpath(".//div[@class='accordion']"));
-        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();", tableFAQ);
-        // Создать объект класса с домашней страницей
-        HomePageScooter objHomePage = new HomePageScooter(driver);
-
-        // Проверка соответствия текста ответа с ожидаемым
-        objHomePage.clickQuestion1();
-        objHomePage.isCorrectText(objHomePage.getAnswer1(), answer1Text);
-
-        objHomePage.clickQuestion2();
-        objHomePage.isCorrectText(objHomePage.getAnswer2(), answer2Text);
-
-        objHomePage.clickQuestion3();
-        objHomePage.isCorrectText(objHomePage.getAnswer3(), answer3Text);
-
-        objHomePage.clickQuestion4();
-        objHomePage.isCorrectText(objHomePage.getAnswer4(), answer4Text);
-
-        objHomePage.clickQuestion5();
-        objHomePage.isCorrectText(objHomePage.getAnswer5(), answer5Text);
-
-        objHomePage.clickQuestion6();
-        objHomePage.isCorrectText(objHomePage.getAnswer6(), answer6Text);
-
-        objHomePage.clickQuestion7();
-        objHomePage.isCorrectText(objHomePage.getAnswer7(), answer7Text);
-
-        objHomePage.clickQuestion8();
-        objHomePage.isCorrectText(objHomePage.getAnswer8(), answer8Text);
-
+        objHomePage.scrollToFAQ();
+        objHomePage.clickQuestion(questionText);
+        objHomePage.isCorrectText(objHomePage.getOpenedAnswerText(), expectedAnswerText);
     }
 
     @After
     public void teardown() {
         driver.quit();
     }
-
 }
