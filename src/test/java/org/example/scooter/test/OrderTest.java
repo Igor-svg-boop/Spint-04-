@@ -80,7 +80,7 @@ public class OrderTest {
         orderPageScooter.clickOrderCreateButton();
         orderPageScooter.clickOrderConfirmButton();
 
-        orderPageScooter.isPageOpen(orderPageScooter.getConfirmHeader(), CONFIRM_HEADER);
+        orderPageScooter.isPageOpen(CONFIRM_HEADER);
     }
 
     private void acceptCookieIfVisible() {

@@ -25,16 +25,16 @@ public class FAQTest {
     }
 
     @Parameterized.Parameters
-    public static Object[][] getTestData() {
+    public static Object[][] getQuestionAndAnswerText() {
         return new Object[][]{
-                {"Сколько это стоит? И как оплатить?", ANSWER_1_TEXT},
-                {"Хочу сразу несколько самокатов! Так можно?", ANSWER_2_TEXT},
-                {"Как рассчитывается время аренды?", ANSWER_3_TEXT},
-                {"Можно ли заказать самокат прямо на сегодня?", ANSWER_4_TEXT},
-                {"Можно ли продлить заказ или вернуть самокат раньше?", ANSWER_5_TEXT},
-                {"Вы привозите зарядку вместе с самокатом?", ANSWER_6_TEXT},
-                {"Можно ли отменить заказ?", ANSWER_7_TEXT},
-                {"Я жизу за МКАДом, привезёте?", ANSWER_8_TEXT}
+                {"Сколько это стоит? И как оплатить?", RENT_PRICE_ANSWER},
+                {"Хочу сразу несколько самокатов! Так можно?", SEVERAL_SCOOTERS_ORDER_ANSWER},
+                {"Как рассчитывается время аренды?", RENT_START_TIME_ANSWER},
+                {"Можно ли заказать самокат прямо на сегодня?", ORDER_DATE_LIMIT_ANSWER},
+                {"Можно ли продлить заказ или вернуть самокат раньше?", ORDER_EXTENSION_ANSWER},
+                {"Вы привозите зарядку вместе с самокатом?", SCOOTER_CHARGE_ANSWER},
+                {"Можно ли отменить заказ?", ORDER_CANCELLATION_ANSWER},
+                {"Я жизу за МКАДом, привезёте?", DELIVERY_AREA_ANSWER}
         };
     }
 

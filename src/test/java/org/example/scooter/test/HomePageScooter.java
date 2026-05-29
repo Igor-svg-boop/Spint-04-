@@ -4,14 +4,18 @@ import org.hamcrest.MatcherAssert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static org.hamcrest.CoreMatchers.is;
 
 public class HomePageScooter {
 
     private final WebDriver driver;
+    private final WebDriverWait wait;
 
     // Кнопка принятия cookies
     private final By acceptCookieButton = By.xpath(".//button[text()='да все привыкли']");
@@ -27,24 +31,25 @@ public class HomePageScooter {
 
     public HomePageScooter(WebDriver driver) {
         this.driver = driver;
+        this.wait = new WebDriverWait(driver, 10);
     }
 
     // Метод для открытия главной страницы
     public void openHomePage() {
-        driver.get("https://qa-scooter.praktikum-services.ru");
+        driver.get("https://qa-scooter.praktikum-services.ru/");
     }
 
     // Метод для принятия cookies
     public void acceptCookieButtonClick() {
         try {
-            driver.findElement(acceptCookieButton).click();
-        } catch (NoSuchElementException ignored) {
+            wait.until(ExpectedConditions.elementToBeClickable(acceptCookieButton)).click();
+        } catch (TimeoutException | NoSuchElementException ignored) {
         }
     }
 
     // Метод для скролла до блока FAQ
     public void scrollToFAQ() {
-        WebElement faqElement = driver.findElement(tableFAQ);
+        WebElement faqElement = wait.until(ExpectedConditions.presenceOfElementLocated(tableFAQ));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", faqElement);
     }
 
@@ -65,13 +70,18 @@ public class HomePageScooter {
 
     // Метод для клика по маленькой кнопке Заказать в шапке
     public void clickHeaderOrderButton() {
-        driver.findElement(headerOrderButton).click();
+        wait.until(ExpectedConditions.elementToBeClickable(headerOrderButton)).click();
     }
 
     // Метод для клика по большой кнопке Заказать на главной странице
     public void clickPageOrderButton() {
-        WebElement bigButton = driver.findElement(pageOrderButton);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", bigButton);
-        bigButton.click();
+        WebElement bigButton = wait.until(ExpectedConditions.presenceOfElementLocated(pageOrderButton));
+
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});",
+                bigButton
+        );
+
+        wait.until(ExpectedConditions.elementToBeClickable(bigButton)).click();
     }
 }
